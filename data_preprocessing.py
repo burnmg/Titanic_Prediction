@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-import seaborn as sb
 import matplotlib as mat
 
 mat.interactive(False)
@@ -19,5 +17,10 @@ train = train.drop(["PassengerId", "Name", "Ticket", "Cabin"], 1) # drop useless
 # mat.pyplot.show()
 
 # replace missing Age with the mean age of each Pclass
-train['Age'][train['Pclass']==1].fillna(
-    train['Age'][train['Pclass'] == 1][train['Age'].notna()].mean(), inplace = True)
+j = (train['Age'].isna()) & (train['Pclass'] == 1)
+train.loc[j,'Age'] = train['Age'][train['Pclass']==1].mean()
+j = (train['Age'].isna()) & (train['Pclass'] == 2)
+train.loc[j,'Age'] = train['Age'][train['Pclass']==2].mean()
+j = (train['Age'].isna()) & (train['Pclass'] == 3)
+train.loc[j,'Age'] = train['Age'][train['Pclass']==3].mean()
+
