@@ -1,6 +1,1 @@
-import pandas as pd
-
-a = pd.DataFrame(
-    {'A':range(1,5),
-     'B':range(3,7)}
-)
+print range(10, 0, -1)
