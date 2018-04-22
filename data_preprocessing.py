@@ -42,6 +42,9 @@ train = pd.concat([train, sex_dummy, embarked_dummy],axis = 1)
 # we found that Fare is correlated with Pclass, we drop one of these
 train.drop(['Fare'], inplace = True, axis = 1)
 
+y = train.iloc[:,0]
+X = train.iloc[:,range(1, train.shape[1])]
+
 
 # processing test data
 test_orig = pd.read_csv('data/test.csv')
