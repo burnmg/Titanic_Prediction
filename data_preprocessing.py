@@ -37,7 +37,7 @@ train.drop(['Embarked', 'Sex'], axis = 1, inplace = True)
 train = pd.concat([train, sex_dummy, embarked_dummy],axis = 1)
 
 # check correlation between variables
-sb.heatmap(train.corr(),vmin=-1, vmax=1, cmap='Spectral')
+## sb.heatmap(train.corr(),vmin=-1, vmax=1, cmap='Spectral')
 
 # we found that Fare is correlated with Pclass, we drop one of these
 train.drop(['Fare'], inplace = True, axis = 1)
