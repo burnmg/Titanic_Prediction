@@ -41,3 +41,17 @@ train = pd.concat([train, sex_dummy, embarked_dummy],axis = 1)
 
 # we found that Fare is correlated with Pclass, we drop one of these
 train.drop(['Fare'], inplace = True, axis = 1)
+
+
+# processing test data
+test_orig = pd.read_csv('data/test.csv')
+test = test_orig.drop(["PassengerId", "Name", "Ticket", "Cabin", "Fare"], 1)
+
+for i in range(1,4):
+    j = (test['Age'].isna()) & (test['Pclass'] == i)
+    test.loc[j,'Age'] = test['Age'][test['Pclass']==i].mean()
+
+embarked_dummy = pd.get_dummies(test['Embarked'], drop_first=True)
+sex_dummy = pd.get_dummies(test['Sex'], drop_first=True)
+test.drop(['Sex', 'Embarked'], axis = 1, inplace = True)
+test = pd.concat([test, embarked_dummy, sex_dummy], axis= 1)
