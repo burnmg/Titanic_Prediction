@@ -40,7 +40,7 @@ train = pd.concat([train, sex_dummy, embarked_dummy],axis = 1)
 ## sb.heatmap(train.corr(),vmin=-1, vmax=1, cmap='Spectral')
 
 # we found that Fare is correlated with Pclass, we drop one of these
-train.drop(['Fare'], inplace = True, axis = 1)
+## train.drop(['Fare'], inplace = True, axis = 1)
 
 y = train.iloc[:,0]
 X = train.iloc[:,range(1, train.shape[1])]
@@ -48,13 +48,23 @@ X = train.iloc[:,range(1, train.shape[1])]
 
 # processing test data
 test_orig = pd.read_csv('data/test.csv')
-test = test_orig.drop(["PassengerId", "Name", "Ticket", "Cabin", "Fare"], 1)
 
-for i in range(1,4):
-    j = (test['Age'].isna()) & (test['Pclass'] == i)
-    test.loc[j,'Age'] = test['Age'][test['Pclass']==i].mean()
+test = test_orig.drop(["PassengerId", "Name", "Ticket", "Cabin"], 1) # drop useless variables
+j = (test['Age'].isna()) & (test['Pclass'] == 1)
+test.loc[j,'Age'] = test['Age'][test['Pclass']==1].mean()
+j = (test['Age'].isna()) & (test['Pclass'] == 2)
+test.loc[j,'Age'] = test['Age'][test['Pclass']==2].mean()
+j = (test['Age'].isna()) & (test['Pclass'] == 3)
+test.loc[j,'Age'] = test['Age'][test['Pclass']==3].mean()
 
+# Create dummy variables
 embarked_dummy = pd.get_dummies(test['Embarked'], drop_first=True)
 sex_dummy = pd.get_dummies(test['Sex'], drop_first=True)
-test.drop(['Sex', 'Embarked'], axis = 1, inplace = True)
-test = pd.concat([test, embarked_dummy, sex_dummy], axis= 1)
+test.drop(['Embarked', 'Sex'], axis = 1, inplace = True)
+test = pd.concat([test, sex_dummy, embarked_dummy],axis = 1)
+
+# Set Fare for the missing value
+test['Fare'] = test['Fare'].fillna(test['Fare'].mean())
+
+## test.drop(['Fare'], inplace = True, axis = 1)
+
