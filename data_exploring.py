@@ -32,7 +32,6 @@ plt.show()
 grid = sb.FacetGrid(train_df, col='Sex', row='Survived')
 grid.map(plt.hist, 'Age')
 
-## Whether
 pclass_survived = pd.DataFrame(
     {'Survived':train_df['Survived'].values,
     'Dead': abs(train_df['Survived'].values - 1),
