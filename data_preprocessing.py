@@ -62,4 +62,24 @@ for dataset in combine:
     dataset['Age'] = dataset['Age'].astype(int)
 
 
-# search: pd.cut
+train_df['AgeBand'] = pd.cut(train_df['Age'], 5)
+
+ageband_vs_survived = train_df[['AgeBand', 'Survived']].groupby(['AgeBand'], as_index=False).mean().sort_values(by = 'AgeBand')
+ageband = ageband_vs_survived['AgeBand']
+
+## cut ages into category
+dataset.loc[(dataset['Age'] <= ageband[0].right),['Age']] = 0
+dataset.loc[(dataset['Age'] > ageband[0].left),['Age']] = len(ageband) - 1
+for dataset in combine:
+    for i in range(1, len(ageband) - 1):
+
+            dataset.loc[(dataset['Age'] > ageband[i].left) & (dataset['Age'] <= ageband[i].right),['Age']] = i
+
+train_df = train_df.drop(['AgeBand'], axis = 1)
+combine = [train_df, test_df]
+
+# Create FamilySize feature
+for dataset in combine:
+    dataset['FamilySize'] = dataset['Parch'] + dataset['SibSp'] + 1
+
+familysize_vs_survived = train_df[['FamilySize', 'Survived']].groupby(by = ['FamilySize'], as_index = False).mean()
