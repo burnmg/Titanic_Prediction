@@ -83,3 +83,22 @@ for dataset in combine:
     dataset['FamilySize'] = dataset['Parch'] + dataset['SibSp'] + 1
 
 familysize_vs_survived = train_df[['FamilySize', 'Survived']].groupby(by = ['FamilySize'], as_index = False).mean()
+
+# Create IsAlone
+for dataset in combine:
+    dataset['IsAlone'] = dataset['FamilySize'] == 1
+    dataset['IsAlone'] = dataset['IsAlone'].astype(int)
+
+
+isalone_vs_survived =  train_df[['IsAlone', 'Survived']].groupby(by = ['IsAlone'], as_index = False).mean()
+
+# plt.bar(isalone_vs_survived.iloc[:,0], isalone_vs_survived.iloc[:,1])
+
+## We found isAlone is the best, so we drop others
+train_df = train_df.drop(['Parch', 'SibSp', 'FamilySize'], axis=1)
+test_df = test_df.drop(['Parch', 'SibSp', 'FamilySize'], axis=1)
+combine = [train_df, test_df]
+
+train_df.head()
+
+# search: We can also create an artificial feature combining Pclass and Age.
